@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="IOSActionSheet">
+        <attr name="ias_background" format="color|reference" />
+        <attr name="ias_chooseBackground" format="color|reference" />
+
+        <attr name="ias_titleTextColor" format="color|reference" />
+        <attr name="ias_cancelButtonTextColor" format="color|reference" />
+        <attr name="ias_otherButtonTextColor" format="color|reference" />
+        <attr name="ias_warningButtonTextColor" format="color|reference" />
+        <attr name="ias_checkButtonTextColor" format="color|reference" />
+
+        <attr name="ias_titleTextSize" format="dimension|reference" />
+        <attr name="ias_subTitleTextSize" format="dimension|reference" />
+        <attr name="ias_cancleButtonTextSize" format="dimension|reference" />
+        <attr name="ias_otherButtonTextSize" format="dimension|reference" />
+        <attr name="ias_warningButtonTextSize" format="dimension|reference" />
+
+        <attr name="ias_lineHeight" format="dimension|reference" />
+        <attr name="ias_cancelButtonMarginTop" format="dimension|reference" />
+        <attr name="ias_radius" format="dimension|reference" />
+        <attr name="ias_padding" format="dimension|reference" />
+
+    </declare-styleable>
+</resources>
