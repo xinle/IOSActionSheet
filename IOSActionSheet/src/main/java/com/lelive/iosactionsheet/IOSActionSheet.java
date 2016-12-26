@@ -11,9 +11,10 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
-import android.support.annotation.AttrRes;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.StyleRes;
 import android.text.TextUtils;
 import android.util.StateSet;
 import android.util.TypedValue;
@@ -22,7 +23,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -41,23 +44,21 @@ public class IOSActionSheet extends Dialog implements View.OnClickListener {
         void onActionSheetItemClick(IOSActionSheet actionSheet, int itemPosition ,ItemModel itemModel);
     }
 
-    private static final int TRANSLATE_DURATION = 100;
-    private static final int TAG_KEY = 1000;
-
-    private Attributes mAttrs;
+    private static final int TRANSLATE_DURATION = 100;  // 动画执行时长
 
     private Context mContext;
 
-    private int mAttributesId;
-
     private LinearLayout mView;
 
-    private String mTitleStr;
-    private String mSubTitleStr;
+    private @StyleRes int mStyleId;
+    private Attributes mAttrs;
+
+    private CharSequence mTitleStr;
+    private CharSequence mSubTitleStr;
+    private CharSequence mCancelButtonTitle = "取消";
+
     private List<ItemModel> mOtherButtonTitles;
-    private String mCancelButtonTitle = "取消";
     private IActionSheetListener mListener;
-    private DrawableSelector mDrawableSelector;
 
     private boolean mDismissed = true;
     private boolean mCancelableOnTouchOutside = true;
@@ -66,39 +67,44 @@ public class IOSActionSheet extends Dialog implements View.OnClickListener {
         this(activity ,null);
     }
 
-    public IOSActionSheet(@NonNull Activity activity ,@AttrRes int attributesId) {
-        this(activity ,null);
+    public IOSActionSheet(@NonNull Activity activity ,@StyleRes int mStyleId) {
+        super(activity);
+        this.mContext = activity;
+        this.mStyleId = mStyleId;
+        init();
     }
 
-    private IOSActionSheet(@NonNull Activity activity ,Attributes attributes) {
+    private IOSActionSheet(@NonNull Activity activity ,@Nullable Attributes attributes) {
         super(activity);
         this.mContext = activity;
         this.mAttrs = attributes;
         init();
     }
 
-
     private IOSActionSheet(@NonNull Builder builder) {
-        this(builder.mActivity ,builder.attributesId);
+        this(builder.mActivity ,builder.styleId);
 
-        if(builder.mAttributes != null) {
-            mAttrs = builder.mAttributes;
+        if(builder.mAttrs != null) {
+            mAttrs = builder.mAttrs;
         }
 
         mTitleStr = builder.mTitleStr;
         mSubTitleStr = builder.mSubTitleStr;
 
         mOtherButtonTitles = builder.mOtherButtonTitles;
-        mCancelButtonTitle = builder.mCancelButtonTitle;
+        mCancelButtonTitle = builder.mCancleTitleStr;
         mListener = builder.mListener;
         mCancelableOnTouchOutside = builder.mCancelableOnTouchOutside;
+        setCanceledOnTouchOutside(mCancelableOnTouchOutside);
     }
 
     private void init() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setCanceledOnTouchOutside(mCancelableOnTouchOutside);
 
-        mAttrs = readAttribute();
+        if(mAttrs == null) {
+            mAttrs = readAttribute();
+        }
 
         LinearLayout linearLay = new LinearLayout(mContext);
         linearLay.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT , ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -115,11 +121,11 @@ public class IOSActionSheet extends Dialog implements View.OnClickListener {
 
     private Attributes readAttribute() {
         Attributes attrs = new Attributes(mContext);
-        if(mAttributesId <= 0) {
+        if(mStyleId <= 0) {
             return mAttrs != null ? mAttrs : attrs;
         }
 
-        TypedArray a = mContext.obtainStyledAttributes(mAttributesId, R.styleable.IOSActionSheet);
+        TypedArray a = mContext.obtainStyledAttributes(mStyleId, R.styleable.IOSActionSheet);
 
         attrs.background = a.getColor(R.styleable.IOSActionSheet_ias_background ,attrs.background);
         attrs.chooseBackground = a.getColor(R.styleable.IOSActionSheet_ias_chooseBackground ,attrs.chooseBackground);
@@ -184,7 +190,7 @@ public class IOSActionSheet extends Dialog implements View.OnClickListener {
         mView.removeAllViews();
         mView.setPadding(mAttrs.padding ,mAttrs.padding ,mAttrs.padding ,mAttrs.padding);
 
-        mDrawableSelector = new DrawableSelector(mAttrs.radius);
+        DrawableSelector mDrawableSelector = new DrawableSelector(mAttrs.radius);
 
         int childCount = 0;
         if(!TextUtils.isEmpty(mTitleStr)) {
@@ -242,7 +248,7 @@ public class IOSActionSheet extends Dialog implements View.OnClickListener {
 
         int topChildCount = mView.getChildCount();
         if(topChildCount > 0) {
-            mView.addView(createLineView(mContext));
+            mView.addView(createLineView());
         }
 
         if (mOtherButtonTitles != null && mOtherButtonTitles.size() > 0) {
@@ -255,7 +261,7 @@ public class IOSActionSheet extends Dialog implements View.OnClickListener {
 
                 button.setTag(itemModel);
 
-                Drawable bg = ItemModel.ITEM_TYPE_CANCLE == itemModel.getItemType() ?
+                Drawable bg = ItemModel.ITEM_TYPE_CANCLE == itemModel.itemType ?
                         mDrawableSelector.createDrawable(mDrawableSelector.rDefault) :
                         mDrawableSelector.getTopBg(childCount, i + topChildCount);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -265,22 +271,22 @@ public class IOSActionSheet extends Dialog implements View.OnClickListener {
                 }
 
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT , mAttrs.lineHeight);
-                button.setText(itemModel.getItemTitle());
-                if(itemModel.getItemType() == ItemModel.ITEM_TYPE_DEFUALT) {
+                button.setText(itemModel.itemTitle);
+                if(itemModel.itemType == ItemModel.ITEM_TYPE_DEFUALT) {
                     ColorStateList colorStateList = new ColorStateList(new int[][]{
                             {-android.R.attr.state_pressed},
                             {android.R.attr.state_pressed}},
                             new int[]{mAttrs.otherButtonTextColor, mAttrs.checkButtonTextColor});
                     button.setTextColor(colorStateList);
                     button.setTextSize(TypedValue.COMPLEX_UNIT_PX, mAttrs.otherButtonTextSize);
-                } else if(itemModel.getItemType() == ItemModel.ITEM_TYPE_WARNING) {
+                } else if(itemModel.itemType == ItemModel.ITEM_TYPE_WARNING) {
                     ColorStateList colorStateList = new ColorStateList(new int[][]{
                             {-android.R.attr.state_pressed},
                             {android.R.attr.state_pressed}},
                             new int[]{mAttrs.warningButtonTextColor, mAttrs.checkButtonTextColor});
                     button.setTextColor(colorStateList);
                     button.setTextSize(TypedValue.COMPLEX_UNIT_PX, mAttrs.warningButtonTextSize);
-                } else if(itemModel.getItemType() == ItemModel.ITEM_TYPE_CANCLE) {
+                } else if(itemModel.itemType == ItemModel.ITEM_TYPE_CANCLE) {
                     ColorStateList colorStateList = new ColorStateList(new int[][]{
                             {-android.R.attr.state_pressed},
                             {android.R.attr.state_pressed}},
@@ -295,14 +301,14 @@ public class IOSActionSheet extends Dialog implements View.OnClickListener {
                 mView.addView(button);
 
                 if(i != mOtherButtonTitles.size() - 1 - (TextUtils.isEmpty(mCancelButtonTitle) ? 0 : 1)
-                        && itemModel.getItemType() != ItemModel.ITEM_TYPE_CANCLE) {
-                    mView.addView(createLineView(mContext));
+                        && itemModel.itemType != ItemModel.ITEM_TYPE_CANCLE) {
+                    mView.addView(createLineView());
                 }
             }
         }
     }
 
-    private View createLineView(Context context) {
+    private View createLineView() {
         View line = new View(mContext);
         line.setBackgroundColor(Color.LTGRAY);
         line.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT ,1));
@@ -314,7 +320,7 @@ public class IOSActionSheet extends Dialog implements View.OnClickListener {
         if(v.getTag() instanceof ItemModel) {
             ItemModel itemModel = (ItemModel) v.getTag();
 
-            if(ItemModel.ITEM_TYPE_CANCLE == itemModel.getItemType()) {
+            if(ItemModel.ITEM_TYPE_CANCLE == itemModel.itemType) {
                 dismiss();
                 return;
             }
@@ -337,9 +343,15 @@ public class IOSActionSheet extends Dialog implements View.OnClickListener {
         if (mView != null) {
             int type = TranslateAnimation.RELATIVE_TO_SELF;
             TranslateAnimation an = new TranslateAnimation(type, 0, type, 0, type, 0, type, 1);
-            an.setDuration(TRANSLATE_DURATION);
-            an.setFillAfter(true);
-            an.setAnimationListener(new Animation.AnimationListener() {
+            AlphaAnimation alpha = new AlphaAnimation(1 , 0);
+
+            AnimationSet animationSet = new AnimationSet(true);
+            animationSet.addAnimation(an);
+            animationSet.addAnimation(alpha);
+            animationSet.setFillAfter(true);
+            animationSet.setDuration(TRANSLATE_DURATION);
+
+            animationSet.setAnimationListener(new Animation.AnimationListener() {
                 @Override
                 public void onAnimationStart(Animation animation) {
                 }
@@ -353,49 +365,38 @@ public class IOSActionSheet extends Dialog implements View.OnClickListener {
                 public void onAnimationRepeat(Animation animation) {
                 }
             });
-            mView.startAnimation(an);
+
+            mView.startAnimation(animationSet);
         }
     }
 
-    public void setTitleStr(String mTitleStr) {
+    public void setAttributesId(@StyleRes int mAttributesId) {
+        this.mStyleId = mAttributesId;
+        mAttrs = readAttribute();
+    }
+
+    public void setAttrs(Attributes attrs) {
+        this.mAttrs = attrs;
+    }
+
+    public void setTitleStr(CharSequence mTitleStr) {
         this.mTitleStr = mTitleStr;
     }
 
-    public void setSubTitleStr(String mSubTitleStr) {
+    public void setSubTitleStr(CharSequence mSubTitleStr) {
         this.mSubTitleStr = mSubTitleStr;
     }
 
-    public List<ItemModel> getOtherButtonTitles() {
-        return mOtherButtonTitles;
+    public void setCancelButtonTitle(CharSequence mCancelButtonTitle) {
+        this.mCancelButtonTitle = mCancelButtonTitle;
     }
 
     public void setOtherButtonTitles(List<ItemModel> mOtherButtonTitles) {
         this.mOtherButtonTitles = mOtherButtonTitles;
     }
 
-    public String getCancelButtonTitle() {
-        return mCancelButtonTitle;
-    }
-
-    public void setCancelButtonTitle(String mCancelButtonTitle) {
-        this.mCancelButtonTitle = mCancelButtonTitle;
-    }
-
-    public IActionSheetListener getItemClickListener() {
-        return mListener;
-    }
-
     public void setItemClickListener(IActionSheetListener mListener) {
         this.mListener = mListener;
-    }
-
-    public void setAttributesId(int mAttributesId) {
-        this.mAttributesId = mAttributesId;
-        mAttrs = readAttribute();
-    }
-
-    public void setAttrs(Attributes attrs) {
-        this.mAttrs = attrs;
     }
 
     private class DrawableSelector {
@@ -455,13 +456,13 @@ public class IOSActionSheet extends Dialog implements View.OnClickListener {
         public static final int ITEM_TYPE_WARNING = 1;
         public static final int ITEM_TYPE_CANCLE = 2;
         @IntDef({ITEM_TYPE_DEFUALT, ITEM_TYPE_WARNING, ITEM_TYPE_CANCLE})
-        @interface ItemType{};
+        @interface ItemType{}
 
-        private String itemTitle;
+        private CharSequence itemTitle;
         @ItemType
         private int itemType = ITEM_TYPE_DEFUALT;
 
-        public ItemModel(String itemTitle ,int itemType) {
+        public ItemModel(CharSequence itemTitle ,@ItemType int itemType) {
             this.itemType = itemType;
             this.itemTitle = itemTitle;
         }
@@ -470,20 +471,12 @@ public class IOSActionSheet extends Dialog implements View.OnClickListener {
             this.itemTitle = itemTitle;
         }
 
-        public int getItemType() {
-            return itemType;
-        }
-
-        public void setItemType(int itemType) {
-            this.itemType = itemType;
-        }
-
-        public String getItemTitle() {
+        public CharSequence getItemTitle() {
             return itemTitle;
         }
 
-        public void setItemTitle(String itemTitle) {
-            this.itemTitle = itemTitle;
+        public int getItemType() {
+            return itemType;
         }
     }
 
@@ -550,14 +543,15 @@ public class IOSActionSheet extends Dialog implements View.OnClickListener {
     public static final class Builder {
         private Activity mActivity;
 
-        private int attributesId;
-        private Attributes mAttributes;
+        private @StyleRes int styleId;
+        private Attributes mAttrs;
 
-        private String mTitleStr;
-        private String mSubTitleStr;
+        private CharSequence mTitleStr;
+        private CharSequence mSubTitleStr;
+        private CharSequence mCancleTitleStr;
 
         private List<ItemModel> mOtherButtonTitles;
-        private String mCancelButtonTitle;
+
         private IActionSheetListener mListener;
 
         private boolean mCancelableOnTouchOutside = true;
@@ -566,18 +560,13 @@ public class IOSActionSheet extends Dialog implements View.OnClickListener {
             mActivity = activity;
         }
 
-        public Builder cancleTitle(String title) {
-            mCancelButtonTitle = title;
-            return this;
-        }
-
         /**
          * 设置属性的id(不能和setAttribute一起设置)
-         * @param attributesId
+         * @param styleId
          * @return
          */
-        public Builder attributesId(int attributesId) {
-            this.attributesId = attributesId;
+        public Builder styleId(@StyleRes int styleId) {
+            this.styleId = styleId;
             return this;
         }
 
@@ -587,17 +576,22 @@ public class IOSActionSheet extends Dialog implements View.OnClickListener {
          * @return
          */
         public Builder attributes(Attributes attributes) {
-            mAttributes = attributes;
+            mAttrs = attributes;
             return this;
         }
 
-        public Builder titleStr(String titleStr) {
+        public Builder titleStr(CharSequence titleStr) {
             mTitleStr = titleStr;
             return this;
         }
 
-        public Builder subTitleStr(String subTitleStr) {
+        public Builder subTitleStr(CharSequence subTitleStr) {
             mSubTitleStr = subTitleStr;
+            return this;
+        }
+
+        public Builder cancleTitle(CharSequence title) {
+            mCancleTitleStr = title;
             return this;
         }
 
@@ -621,5 +615,4 @@ public class IOSActionSheet extends Dialog implements View.OnClickListener {
             actionSheet.show();
         }
     }
-
 }

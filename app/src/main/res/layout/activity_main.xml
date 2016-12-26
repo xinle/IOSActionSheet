@@ -12,13 +12,15 @@
 
     <Button
         android:id="@+id/button1"
-        android:text="弹出方式1"
+        android:textAllCaps="false"
+        android:text="使用Builder方式弹出"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
     <Button
         android:id="@+id/button2"
-        android:text="弹出方式2"
+        android:textAllCaps="false"
+        android:text="普通方式弹出"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
