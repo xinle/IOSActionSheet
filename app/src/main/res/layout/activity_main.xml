@@ -24,4 +24,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
+    <Button
+        android:id="@+id/button3"
+        android:textAllCaps="false"
+        android:text="使用style方式改变View样式"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
 </LinearLayout>

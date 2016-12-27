@@ -8,4 +8,48 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="IOSActionSheetStyleDefualt">
+        <item name="ias_background">@color/ias_background</item>
+        <item name="ias_chooseBackground">@color/colorPrimary</item>
+
+        <item name="ias_titleTextColor">@color/ias_titleTextColor</item>
+        <item name="ias_cancelButtonTextColor">@color/ias_cancelButtonTextColor</item>
+        <item name="ias_otherButtonTextColor">@color/ias_otherButtonTextColor</item>
+        <item name="ias_warningButtonTextColor">@color/ias_warningButtonTextColor</item>
+        <item name="ias_checkButtonTextColor">@color/ias_checkButtonTextColor</item>
+
+        <item name="ias_titleTextSize">@dimen/ias_titleTextSize</item>
+        <item name="ias_subTitleTextSize">@dimen/ias_subTitleTextSize</item>
+        <item name="ias_cancleButtonTextSize">@dimen/ias_cancleButtonTextSize</item>
+        <item name="ias_otherButtonTextSize">@dimen/ias_otherButtonTextSize</item>
+        <item name="ias_warningButtonTextSize">@dimen/ias_warningButtonTextSize</item>
+
+        <item name="ias_lineHeight">@dimen/ias_lineHeight</item>
+        <item name="ias_cancelButtonMarginTop">@dimen/ias_cancelButtonMarginTop</item>
+        <item name="ias_radius">@dimen/ias_radius</item>
+        <item name="ias_padding">@dimen/ias_padding</item>
+    </style>
+
+    <style name="IOSActionSheetStyleCustom">
+        <item name="ias_background">@color/ias_background</item>
+        <item name="ias_chooseBackground">@color/colorPrimaryDark</item>
+
+        <item name="ias_titleTextColor">@color/ias_titleTextColor</item>
+        <item name="ias_cancelButtonTextColor">@color/color1</item>
+        <item name="ias_otherButtonTextColor">@color/color2</item>
+        <item name="ias_warningButtonTextColor">@color/color4</item>
+        <item name="ias_checkButtonTextColor">@color/ias_checkButtonTextColor</item>
+
+        <item name="ias_titleTextSize">19sp</item>
+        <item name="ias_subTitleTextSize">16sp</item>
+        <item name="ias_cancleButtonTextSize">20sp</item>
+        <item name="ias_otherButtonTextSize">12sp</item>
+        <item name="ias_warningButtonTextSize">14sp</item>
+
+        <item name="ias_lineHeight">70dp</item>
+        <item name="ias_cancelButtonMarginTop">20dp</item>
+        <item name="ias_radius">0dp</item>
+        <item name="ias_padding">0dp</item>
+    </style>
+
 </resources>

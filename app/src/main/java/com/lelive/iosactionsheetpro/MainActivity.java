@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         findViewById(R.id.button1).setOnClickListener(this);
         findViewById(R.id.button2).setOnClickListener(this);
+        findViewById(R.id.button3).setOnClickListener(this);
     }
 
     @Override
@@ -33,8 +34,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         })
                         .titleStr("确定删除?")
                         .subTitleStr("删除后操作不能回退")
-                        .cancleTitle("取消")
-                        .cancleAbleOnTouchOutside(false)
                         .itemClickListener(new IOSActionSheet.IActionSheetListener() {
                             @Override
                             public void onActionSheetItemClick(IOSActionSheet actionSheet, int itemPosition, IOSActionSheet.ItemModel itemModel) {
@@ -52,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 });
                 sheet.setTitleStr("确定删除?");
-                sheet.setCancelButtonTitle("取消");
+                sheet.setCanceledOnTouchOutside(false);
                 sheet.setItemClickListener(new IOSActionSheet.IActionSheetListener() {
                     @Override
                     public void onActionSheetItemClick(IOSActionSheet actionSheet, int itemPosition, IOSActionSheet.ItemModel itemModel) {
@@ -60,6 +59,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 });
                 sheet.show();
+                break;
+            case R.id.button3:
+                new IOSActionSheet.Builder(MainActivity.this)
+                        .styleId(R.style.IOSActionSheetStyleCustom).otherButtonTitles(new ArrayList<IOSActionSheet.ItemModel>() {
+                            {
+                                add(new IOSActionSheet.ItemModel("删除", IOSActionSheet.ItemModel.ITEM_TYPE_WARNING));
+                                add(new IOSActionSheet.ItemModel("选择"));
+                            }
+                        })
+                        .cancleTitle("淡定")
+                        .haveCancleBtn(true)
+                        .titleStr("确定删除?")
+                        .subTitleStr("删除后操作不能回退")
+                        .show();
                 break;
         }
     }

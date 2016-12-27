@@ -2,4 +2,16 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="ias_titleTextSize">16sp</dimen>
+    <dimen name="ias_subTitleTextSize">14sp</dimen>
+    <dimen name="ias_cancleButtonTextSize">16sp</dimen>
+    <dimen name="ias_otherButtonTextSize">16sp</dimen>
+    <dimen name="ias_warningButtonTextSize">16sp</dimen>
+
+    <dimen name="ias_lineHeight">55dp</dimen>
+    <dimen name="ias_cancelButtonMarginTop">10dp</dimen>
+    <dimen name="ias_radius">8dp</dimen>
+    <dimen name="ias_padding">10dp</dimen>
+
 </resources>

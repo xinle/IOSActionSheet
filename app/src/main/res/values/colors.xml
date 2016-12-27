@@ -3,4 +3,21 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="ias_background">#D6FFFFFF</color>
+    <color name="ias_chooseBackground">#D6DADADA</color>
+
+    <color name="ias_titleTextColor">#FF888888</color>
+    <color name="ias_cancelButtonTextColor">#FF0000FF</color>
+    <color name="ias_otherButtonTextColor">#FF0000FF</color>
+    <color name="ias_warningButtonTextColor">#FFFF0000</color>
+    <color name="ias_checkButtonTextColor">#FFFFFFFF</color>
+
+    <color name="color1">#FFEB00</color>
+    <color name="color2">#53FF2D</color>
+    <color name="color3">#3FFFA4</color>
+    <color name="color4">#47DAFF</color>
+    <color name="color5">#3E5EFF</color>
+    <color name="color6">#FF84A6</color>
+
 </resources>

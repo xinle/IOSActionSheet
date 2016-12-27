@@ -45,6 +45,7 @@ public class IOSActionSheet extends Dialog implements View.OnClickListener {
     }
 
     private static final int TRANSLATE_DURATION = 100;  // 动画执行时长
+    private static final String DEFUALT_CANCLE_TITLE = "取消";
 
     private Context mContext;
 
@@ -55,7 +56,8 @@ public class IOSActionSheet extends Dialog implements View.OnClickListener {
 
     private CharSequence mTitleStr;
     private CharSequence mSubTitleStr;
-    private CharSequence mCancelButtonTitle = "取消";
+    private CharSequence mCancelButtonTitle = DEFUALT_CANCLE_TITLE;
+    private boolean mHaveCancleBtn = true;
 
     private List<ItemModel> mOtherButtonTitles;
     private IActionSheetListener mListener;
@@ -93,6 +95,8 @@ public class IOSActionSheet extends Dialog implements View.OnClickListener {
 
         mOtherButtonTitles = builder.mOtherButtonTitles;
         mCancelButtonTitle = builder.mCancleTitleStr;
+        mHaveCancleBtn = builder.mHaveCancleBtn;
+
         mListener = builder.mListener;
         mCancelableOnTouchOutside = builder.mCancelableOnTouchOutside;
         setCanceledOnTouchOutside(mCancelableOnTouchOutside);
@@ -201,7 +205,7 @@ public class IOSActionSheet extends Dialog implements View.OnClickListener {
             childCount += mOtherButtonTitles.size();
         }
 
-        if(!TextUtils.isEmpty(mCancelButtonTitle)) {
+        if(!TextUtils.isEmpty(mCancelButtonTitle) && mHaveCancleBtn) {
             if(mOtherButtonTitles == null) {
                 mOtherButtonTitles = new ArrayList<>();
             }
@@ -391,6 +395,10 @@ public class IOSActionSheet extends Dialog implements View.OnClickListener {
         this.mCancelButtonTitle = mCancelButtonTitle;
     }
 
+    public void setHaveCancleBtn(boolean haveCancleBtn) {
+        this.mHaveCancleBtn = haveCancleBtn;
+    }
+
     public void setOtherButtonTitles(List<ItemModel> mOtherButtonTitles) {
         this.mOtherButtonTitles = mOtherButtonTitles;
     }
@@ -548,7 +556,8 @@ public class IOSActionSheet extends Dialog implements View.OnClickListener {
 
         private CharSequence mTitleStr;
         private CharSequence mSubTitleStr;
-        private CharSequence mCancleTitleStr;
+        private CharSequence mCancleTitleStr = DEFUALT_CANCLE_TITLE;
+        private boolean mHaveCancleBtn = true;
 
         private List<ItemModel> mOtherButtonTitles;
 
@@ -607,6 +616,11 @@ public class IOSActionSheet extends Dialog implements View.OnClickListener {
 
         public Builder cancleAbleOnTouchOutside(boolean cancelable) {
             mCancelableOnTouchOutside = cancelable;
+            return this;
+        }
+
+        public Builder haveCancleBtn(boolean haveCancleBtn) {
+            mHaveCancleBtn = haveCancleBtn;
             return this;
         }
 
