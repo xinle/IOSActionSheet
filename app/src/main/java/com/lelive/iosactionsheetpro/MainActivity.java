@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 add(new IOSActionSheet.ItemModel("选择"));
                             }
                         })
-                        .cancleTitle("淡定")
+                        .cancleTitle("取消")
                         .haveCancleBtn(true)
                         .titleStr("确定删除?")
                         .subTitleStr("删除后操作不能回退")

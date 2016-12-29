@@ -47,7 +47,7 @@
         <item name="ias_warningButtonTextSize">14sp</item>
 
         <item name="ias_lineHeight">70dp</item>
-        <item name="ias_cancelButtonMarginTop">20dp</item>
+        <item name="ias_cancelButtonMarginTop">5dp</item>
         <item name="ias_radius">0dp</item>
         <item name="ias_padding">0dp</item>
     </style>
