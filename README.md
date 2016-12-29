@@ -3,9 +3,13 @@ Android 仿IOS ActionSheet UI样式 ,通过纯代码实现 ,不用导入额外�
 
 ## Screenshot
 
-![](http://p1.bqimg.com/567571/9e824eccc1fceb97.jpg)
+![](https://github.com/xinle/IOSActionSheet/blob/master/screenshot/Screenshot_1483025140.jpg)
 
-![](http://p1.bqimg.com/567571/7e66d7e7a06a10bb.jpg)
+![](https://github.com/xinle/IOSActionSheet/blob/master/screenshot/Screenshot_1483025334.jpg)
+
+<!--![](http://p1.bqimg.com/567571/9e824eccc1fceb97.jpg)
+
+![](http://p1.bqimg.com/567571/7e66d7e7a06a10bb.jpg)-->
 
 ## 使用
 - 方式 1. 拷贝Libs工程里面的IOSActionSheet 和style.xml到自己的工程里面
