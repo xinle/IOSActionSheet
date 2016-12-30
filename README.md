@@ -63,17 +63,18 @@ sheet.show();
 
 ```java
 new IOSActionSheet.Builder(MainActivity.this)
-                    .styleId(R.style.IOSActionSheetStyleCustom).otherButtonTitles(new ArrayList<IOSActionSheet.ItemModel>() {
-                        {
-                            add(new IOSActionSheet.ItemModel("删除", IOSActionSheet.ItemModel.ITEM_TYPE_WARNING));
-                            add(new IOSActionSheet.ItemModel("选择"));
-                        }
-                    })
-                    .cancleTitle("取消")
-                    .haveCancleBtn(true)
-                    .titleStr("确定删除?")
-                    .subTitleStr("删除后操作不能回退")
-                    .show();
+    .styleId(R.style.IOSActionSheetStyleCustom)
+    .otherButtonTitles(new ArrayList<IOSActionSheet.ItemModel>() {
+        {
+            add(new IOSActionSheet.ItemModel("删除", IOSActionSheet.ItemModel.ITEM_TYPE_WARNING));
+            add(new IOSActionSheet.ItemModel("选择"));
+        }
+    })
+    .cancleTitle("取消")
+    .haveCancleBtn(true)
+    .titleStr("确定删除?")
+    .subTitleStr("删除后操作不能回退")
+    .show();
 ```
 
 样式文件(其中下面的样式可以不用写全,即希望修改什么就填什么)
