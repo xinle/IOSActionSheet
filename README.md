@@ -101,3 +101,24 @@ new IOSActionSheet.Builder(MainActivity.this)
     <item name="ias_padding">0dp</item>
 </style>
 ```
+
+- 属性说明
+
+| Attribute                  | 属性含义                                     | 默认值     |
+|:---------------------------|:--------------------------------------------|:----------|
+| ias_background             | 背景色                                      | #D6FFFFFF |
+| ias_chooseBackground       | 选中状态下的背景色                           | #D6DADADA |
+| ias_titleTextColor         | 头部的文字颜色                               | #FF888888 |
+| ias_cancelButtonTextColor  | 取消按钮的颜色                               | #FF0000FF |
+| ias_otherButtonTextColor   | 普通按钮的颜色                               | #FF0000FF |
+| ias_warningButtonTextColor | 警告按钮的颜色                               | #FFFF0000 |
+| ias_checkButtonTextColor   | 所有按钮选中状态下的颜色                      | #FFFFFFFF |
+| ias_titleTextSize          | 头部文字的大小                               | 16sp      |
+| ias_subTitleTextSize       | 二级头部文字的大小                           | 14sp      |
+| ias_cancleButtonTextSize   | 取消按钮的文字大小                           | 16sp      |
+| ias_otherButtonTextSize    | 普通按钮的文字大小                           | 16sp      |
+| ias_warningButtonTextSize  | 警告文字的大小                               | 16sp      |
+| ias_lineHeight             | 每个item的高度(头部title的高度最少是这个高度) | 55dp      |
+| ias_cancelButtonMarginTop  | 取消按钮距离上部的margin                     | 10dp      |
+| ias_radius                 | 圆角半径                                     | 8dp       |
+| ias_padding                | 弹窗距离屏幕的padding                        | 10dp      |
