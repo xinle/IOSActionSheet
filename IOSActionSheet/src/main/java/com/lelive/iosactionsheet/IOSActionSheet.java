@@ -403,6 +403,28 @@ public class IOSActionSheet extends Dialog implements View.OnClickListener {
         this.mOtherButtonTitles = mOtherButtonTitles;
     }
 
+    public void setOtherButtonTitlesSimple(List<? extends CharSequence> mOtherButtonTitles) {
+        if(mOtherButtonTitles == null) {
+            this.mOtherButtonTitles = null;
+        } else {
+            this.mOtherButtonTitles = new ArrayList<>();
+            for (CharSequence item : mOtherButtonTitles) {
+                this.mOtherButtonTitles.add(new ItemModel(item));
+            }
+        }
+    }
+
+    public void otherButtonTitlesSimple(CharSequence ... mOtherButtonTitles) {
+        if(mOtherButtonTitles == null) {
+            this.mOtherButtonTitles = null;
+        } else {
+            this.mOtherButtonTitles = new ArrayList<>();
+            for (CharSequence item : mOtherButtonTitles) {
+                this.mOtherButtonTitles.add(new ItemModel(item));
+            }
+        }
+    }
+
     public void setItemClickListener(IActionSheetListener mListener) {
         this.mListener = mListener;
     }
@@ -475,7 +497,7 @@ public class IOSActionSheet extends Dialog implements View.OnClickListener {
             this.itemTitle = itemTitle;
         }
 
-        public ItemModel(String itemTitle) {
+        public ItemModel(CharSequence itemTitle) {
             this.itemTitle = itemTitle;
         }
 
@@ -606,6 +628,27 @@ public class IOSActionSheet extends Dialog implements View.OnClickListener {
 
         public Builder otherButtonTitles(List<ItemModel> otherButtonTitles) {
             mOtherButtonTitles = otherButtonTitles;
+            return this;
+        }
+
+        public Builder otherButtonTitlesSimple(List<? extends CharSequence> items) {
+            if(items != null) {
+                mOtherButtonTitles = new ArrayList<>();
+                for (CharSequence item : items) {
+                    mOtherButtonTitles.add(new ItemModel(item));
+                }
+            }
+            
+            return this;
+        }
+
+        public Builder otherButtonTitlesSimple(CharSequence ... items) {
+            if(items != null) {
+                mOtherButtonTitles = new ArrayList<>();
+                for (CharSequence item : items) {
+                    mOtherButtonTitles.add(new ItemModel(item));
+                }
+            }
             return this;
         }
 

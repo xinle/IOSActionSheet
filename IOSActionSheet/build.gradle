@@ -42,7 +42,8 @@ publish {
     userOrg = 'xinledanding'
     groupId = 'com.lelive'
     artifactId = 'IOSActionSheet'
-    publishVersion = '1.0.0'
-    desc = 'Android copy IOS ActionSheet UI style, through pure code, don\'t need to import additional images, can be customized'
+    publishVersion = '1.0.1'
+    desc = '1.0.0 Android copy IOS ActionSheet UI style, through pure code, don\'t need to import additional images, can be customized\r\n' +
+            '1.0.1 添加了相关的简单设置参数的方法'
     website = 'https://github.com/xinle/IOSActionSheet'
 }

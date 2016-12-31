@@ -26,12 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.button1:
                 new IOSActionSheet.Builder(MainActivity.this)
-                        .otherButtonTitles(new ArrayList<IOSActionSheet.ItemModel>() {
-                            {
-                                add(new IOSActionSheet.ItemModel("删除" , IOSActionSheet.ItemModel.ITEM_TYPE_WARNING));
-                                add(new IOSActionSheet.ItemModel("选择"));
-                            }
-                        })
+                        .otherButtonTitlesSimple("删除" ,"选择")
                         .titleStr("确定删除?")
                         .subTitleStr("删除后操作不能回退")
                         .itemClickListener(new IOSActionSheet.IActionSheetListener() {
