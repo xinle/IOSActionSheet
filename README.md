@@ -1,4 +1,8 @@
 # IOSActionSheet
+
+[![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+[![Download](https://api.bintray.com/packages/xinledanding/maven/IOSActionSheet/images/download.svg) ](https://bintray.com/xinledanding/maven/IOSActionSheet/_latestVersion)
+
 Android 仿IOS ActionSheet UI样式 ,通过纯代码实现 ,不用导入额外的图片 ,可定制化能力强
 
 ## Screenshot
