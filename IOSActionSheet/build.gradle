@@ -39,7 +39,7 @@ dependencies {
 
 
 publish {
-    userOrg = 'xinledanding'
+    userOrg = 'xinle'
     groupId = 'com.lelive'
     artifactId = 'IOSActionSheet'
     publishVersion = '1.0.1'
